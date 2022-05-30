@@ -24,9 +24,9 @@ function particles_initial_condition(x__grid_center,y__grid_center,z__grid_cente
 			push!(x_particle_position,x__grid_center[i])
 			push!(y_particle_position,y__grid_center[i])
 			push!(z_particle_position,z__grid_center[i])			
-			push!(x_particle_direction,1)						
-			push!(y_particle_direction,0)						
-			push!(z_particle_direction,0)						
+			push!(x_particle_direction,1)	#x unitary vector velocity					
+			push!(y_particle_direction,0)	#y unitary vector velocity					
+			push!(z_particle_direction,0)	#z unitary vector velocity					
 			push!(particles_rho,[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im])
 			push!(particles_rho_bar,[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im])						
 			cell_vol=cell_x_lenght*cell_y_lenght*cell_z_lenght								
@@ -34,7 +34,7 @@ function particles_initial_condition(x__grid_center,y__grid_center,z__grid_cente
 			#push!(number_of_antineutrinos,2)						
 			push!(number_of_neutrinos,cell_vol*particles_number_density+cell_vol*particles_number_density*rand(Float64))						
 			push!(number_of_antineutrinos,cell_vol*particles_number_density+cell_vol*particles_number_density*rand(Float64))						
-
+			
 			#second particle to the left
 			push!(x_particle_position,x__grid_center[i])
 			push!(y_particle_position,y__grid_center[i])
@@ -48,8 +48,9 @@ function particles_initial_condition(x__grid_center,y__grid_center,z__grid_cente
 			#push!(number_of_neutrinos,1)						
 			#push!(number_of_antineutrinos,1)						
 			push!(number_of_neutrinos,cell_vol*particles_number_density+cell_vol*particles_number_density*rand(Float64))						
-			push!(number_of_antineutrinos,cell_vol*particles_number_density+cell_vol*particles_number_density*rand(Float64))						
+			push!(number_of_antineutrinos,cell_vol*particles_number_density+cell_vol*particles_number_density*rand(Float64))
 	end
+	println("Creating particles initial condition")							
 	return x_particle_position,y_particle_position,z_particle_position,x_particle_direction,y_particle_direction,z_particle_direction,particles_rho,particles_rho_bar,number_of_neutrinos,number_of_antineutrinos
 end
 
@@ -111,5 +112,55 @@ function normalization(rho,rho_bar)
  	gellmann_8=(1/sqrt(3))*[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 1.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im -2.0+0.0im]
 
 end
+
+
+
+
+
+function write_info(particle_data)
+		
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

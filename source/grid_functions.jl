@@ -10,7 +10,7 @@ include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my
 # compute cells centers in base of imput parameters
 
 function cells_center()	
-	
+
 	x_grid_center=Array{Float64,1}(undef,0)
 	y_grid_center=Array{Float64,1}(undef,0)
 	z_grid_center=Array{Float64,1}(undef,0)
@@ -21,6 +21,7 @@ function cells_center()
 		push!(z_grid_center,cell_z_lenght/2)
 	end
 	
+	println("Computing cell center")	
 	return x_grid_center,y_grid_center,z_grid_center
 end
 
@@ -54,6 +55,8 @@ function particles_number_cell(x_par,y_par,z_par)
 			exit()
 		end
 	end
+	
+	println("Computing number cell the particles below")	
 	return particle_num_cell		
 end
 
@@ -72,9 +75,9 @@ end
 
 function shape_function(x_par,y_par,z_par,x_cell_center,y_cell_center,z_cell_center,num_cell)
 
-	sf_w=Array{Int128,1}(undef,0)	
-	sf_w_p1=Array{Int128,1}(undef,0)	
-	sf_w_m1=Array{Int128,1}(undef,0)		
+	sf_w=Array{Float64,1}(undef,0)	
+	sf_w_p1=Array{Float64,1}(undef,0)	
+	sf_w_m1=Array{Float64,1}(undef,0)		
 
 
 	for i in eachindex(x_par)
@@ -118,7 +121,9 @@ function shape_function(x_par,y_par,z_par,x_cell_center,y_cell_center,z_cell_cen
 		push!(sf_w_m1,w_cell_minus_1/(w_cell+w_cell_plus_1+w_cell_minus_1))		
 		push!(sf_w,w_cell/(w_cell+w_cell_plus_1+w_cell_minus_1))
 		push!(sf_w_p1,w_cell_plus_1/(w_cell+w_cell_plus_1+w_cell_minus_1))		
-	end	
+	end
+	
+	println("Computing particles shape function")		
 	return sf_w_m1,sf_w,sf_w_p1
 end
 
@@ -151,34 +156,28 @@ end
 
 function deposition_from_particles_to_grid(x_dir,y_dir,z_dir,rho,rho_bar,N_neutrinos,N_antineutrinos,wm1,w,wp1,par_num_cell)
 	
-	# number density matrix
-
 	nd_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
 	nd_bar_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
+	
 	x_flux_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
 	y_flux_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
 	z_flux_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
+	
 	x_flux_bar_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
 	y_flux_bar_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
 	z_flux_bar_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
-	lepton_density_grid=Array{Float64,1}(undef,number_of_cells)
-	x_flux_lepton_density_grid=Array{Float64,1}(undef,number_of_cells)
-	y_flux_lepton_density_grid=Array{Float64,1}(undef,number_of_cells)
-	z_flux_lepton_density_grid=Array{Float64,1}(undef,number_of_cells)
-		
+	
 	for i in eachindex(nd_grid)
 		nd_grid[i]     =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		nd_bar_grid[i] =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
+		
 		x_flux_grid[i]     =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		y_flux_grid[i]	   =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		z_flux_grid[i]	   =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
+		
 		x_flux_bar_grid[i] =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		y_flux_bar_grid[i] =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		z_flux_bar_grid[i] =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]	
-		lepton_density_grid[i]=0.0
-		x_flux_lepton_density_grid[i]=0.0
-		y_flux_lepton_density_grid[i]=0.0
-		z_flux_lepton_density_grid[i]=0.0
 	end
 	
 	for i in eachindex(par_num_cell)
@@ -215,22 +214,6 @@ function deposition_from_particles_to_grid(x_dir,y_dir,z_dir,rho,rho_bar,N_neutr
 			z_flux_bar_grid[1]       	     +=N_antineutrinos[i]*w[i]*rho_bar[i]*z_dir[i]
 			z_flux_bar_grid[2]       	     +=N_antineutrinos[i]*wp1[i]*rho_bar[i]*z_dir[i]
 			
-			lepton_density_grid[number_of_cells] +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]
-			lepton_density_grid[1]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]
-			lepton_density_grid[2]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]
-		
-			x_flux_lepton_density_grid[number_of_cells]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*x_dir[i]
-			x_flux_lepton_density_grid[1]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*x_dir[i]
-			x_flux_lepton_density_grid[2]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*x_dir[i]
-
-			y_flux_lepton_density_grid[number_of_cells]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*y_dir[i]
-			y_flux_lepton_density_grid[1]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*y_dir[i]
-			y_flux_lepton_density_grid[2]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*y_dir[i]			
-					
-			z_flux_lepton_density_grid[number_of_cells]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*z_dir[i]
-			z_flux_lepton_density_grid[1]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*z_dir[i]
-			z_flux_lepton_density_grid[2]       	     +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*z_dir[i]
-		
 		elseif par_num_cell[i]==number_of_cells
 			
 			nd_grid[par_num_cell[i]-1] +=N_neutrinos[i]*wm1[i]*rho[i]
@@ -264,26 +247,7 @@ function deposition_from_particles_to_grid(x_dir,y_dir,z_dir,rho,rho_bar,N_neutr
 			z_flux_bar_grid[par_num_cell[i]-1]   +=N_antineutrinos[i]*wm1[i]*rho_bar[i]*z_dir[i]
 			z_flux_bar_grid[par_num_cell[i]]     +=N_antineutrinos[i]*w[i]*rho_bar[i]*z_dir[i]
 			z_flux_bar_grid[1]       	     +=N_antineutrinos[i]*wp1[i]*rho_bar[i]*z_dir[i]
-
-			lepton_density_grid[par_num_cell[i]-1] +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]
-			lepton_density_grid[par_num_cell[i]]   +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]
-			lepton_density_grid[1]       	       +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]
-		
-			x_flux_lepton_density_grid[par_num_cell[i]-1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*x_dir[i]
-			x_flux_lepton_density_grid[par_num_cell[i]]    +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*x_dir[i]
-			x_flux_lepton_density_grid[1]       	       +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*x_dir[i]
-
-			y_flux_lepton_density_grid[par_num_cell[i]-1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*y_dir[i]
-			y_flux_lepton_density_grid[par_num_cell[i]]    +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*y_dir[i]
-			y_flux_lepton_density_grid[1]       	       +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*y_dir[i]			
-					
-			z_flux_lepton_density_grid[par_num_cell[i]-1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*z_dir[i]
-			z_flux_lepton_density_grid[par_num_cell[i]]    +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*z_dir[i]
-			z_flux_lepton_density_grid[1]       	       +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*z_dir[i]
-		
-		
 		else
-		
 			nd_grid[par_num_cell[i]-1] +=N_neutrinos[i]*wm1[i]*rho[i]
 			nd_grid[par_num_cell[i]]   +=N_neutrinos[i]*w[i]*rho[i]
 			nd_grid[par_num_cell[i]+1] +=N_neutrinos[i]*wp1[i]*rho[i]
@@ -319,22 +283,6 @@ function deposition_from_particles_to_grid(x_dir,y_dir,z_dir,rho,rho_bar,N_neutr
 			z_flux_bar_grid[par_num_cell[i]-1]   +=N_antineutrinos[i]*wm1[i]*rho_bar[i]*z_dir[i]
 			z_flux_bar_grid[par_num_cell[i]]     +=N_antineutrinos[i]*w[i]*rho_bar[i]*z_dir[i]
 			z_flux_bar_grid[1]       	     +=N_antineutrinos[i]*wp1[i]*rho_bar[i]*z_dir[i]
-
-			lepton_density_grid[par_num_cell[i]-1] +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]
-			lepton_density_grid[par_num_cell[i]]   +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]
-			lepton_density_grid[par_num_cell[i]+1]       	       +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]
-		
-			x_flux_lepton_density_grid[par_num_cell[i]-1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*x_dir[i]
-			x_flux_lepton_density_grid[par_num_cell[i]]    +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*x_dir[i]
-			x_flux_lepton_density_grid[par_num_cell[i]+1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*x_dir[i]
-
-			y_flux_lepton_density_grid[par_num_cell[i]-1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*y_dir[i]
-			y_flux_lepton_density_grid[par_num_cell[i]]    +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*y_dir[i]
-			y_flux_lepton_density_grid[par_num_cell[i]+1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*y_dir[i]			
-					
-			z_flux_lepton_density_grid[par_num_cell[i]-1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wm1[i]*z_dir[i]
-			z_flux_lepton_density_grid[par_num_cell[i]]    +=(N_neutrinos[i]-N_antineutrinos[i])*w[i]*z_dir[i]
-			z_flux_lepton_density_grid[par_num_cell[i]+1]  +=(N_neutrinos[i]-N_antineutrinos[i])*wp1[i]*z_dir[i]				
 		end
 	end
 	
@@ -348,12 +296,9 @@ function deposition_from_particles_to_grid(x_dir,y_dir,z_dir,rho,rho_bar,N_neutr
 	x_flux_bar_grid=x_flux_bar_grid/cell_vol
 	y_flux_bar_grid=y_flux_bar_grid/cell_vol
 	z_flux_bar_grid=z_flux_bar_grid/cell_vol
-	lepton_density_grid=lepton_density_grid/cell_vol
-	x_flux_lepton_density_grid=x_flux_lepton_density_grid/cell_vol
-	y_flux_lepton_density_grid=y_flux_lepton_density_grid/cell_vol
-	z_flux_lepton_density_grid=z_flux_lepton_density_grid/cell_vol
-						
-	return nd_grid,nd_bar_grid,x_flux_grid,y_flux_grid,z_flux_grid,x_flux_bar_grid,y_flux_bar_grid,z_flux_bar_grid,lepton_density_grid,x_flux_lepton_density_grid,y_flux_lepton_density_grid,z_flux_lepton_density_grid
+	
+	println("Depositing information from particle to grid")							
+	return nd_grid,nd_bar_grid,x_flux_grid,y_flux_grid,z_flux_grid,x_flux_bar_grid,y_flux_bar_grid,z_flux_bar_grid
 end
 
 
@@ -389,38 +334,27 @@ function interpolation_from_grid_to_particles(wm1,w,wp1,par_num_cell,data_from_g
 	x_flux_bar_grid=data_from_grid[6]
 	y_flux_bar_grid=data_from_grid[7]
 	z_flux_bar_grid=data_from_grid[8]
-	
-	lep_density_grid=data_from_grid[9]
-	x_flux_lep_density_grid=data_from_grid[10]
-	y_flux_lep_density_grid=data_from_grid[11]
-	z_flux_lep_density_grid=data_from_grid[12]
-
-	lepton_num_den_particles=Array{Float64,1}(undef,2*number_of_cells)
-	x_lepton_flux_particles=Array{Float64,1}(undef,2*number_of_cells)
-	y_lepton_flux_particles=Array{Float64,1}(undef,2*number_of_cells)
-	z_lepton_flux_particles=Array{Float64,1}(undef,2*number_of_cells)
 
 	number_den_particles    =Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
 	number_den_bar_particles=Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
+	
 	x_flux_particles        =Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
 	y_flux_particles        =Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
 	z_flux_particles        =Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
+	
 	x_flux_bar_particles    =Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
 	y_flux_bar_particles    =Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
 	z_flux_bar_particles    =Array{Array{Complex{Float64},2},1}(undef,2*number_of_cells)
 	
-	for i in eachindex(lepton_num_den_particles)	
+	for i in eachindex(number_den_particles)	
 	
-		lepton_num_den_particles[i]=0.0
-		x_lepton_flux_particles[i]=0.0
-		y_lepton_flux_particles[i]=0.0
-		z_lepton_flux_particles[i]=0.0
-		
 		number_den_particles[i]    =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]	
 		number_den_bar_particles[i]=[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]	
+		
 		x_flux_particles[i]        =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		y_flux_particles[i]	   =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		z_flux_particles[i]	   =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
+		
 		x_flux_bar_particles[i]    =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		y_flux_bar_particles[i]    =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
 		z_flux_bar_particles[i]    =[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
@@ -462,23 +396,7 @@ function interpolation_from_grid_to_particles(wm1,w,wp1,par_num_cell,data_from_g
 			z_flux_bar_particles[i]+=wm1[i]*z_flux_bar_grid[number_of_cells]
 			z_flux_bar_particles[i]+=w[i]*z_flux_bar_grid[par_num_cell[i]]
 			z_flux_bar_particles[i]+=wp1[i]*z_flux_bar_grid[par_num_cell[i]+1]
-			
-			lepton_num_den_particles[i]+=wm1[i]*lep_density_grid[number_of_cells]						
-			lepton_num_den_particles[i]+=w[i]*lep_density_grid[par_num_cell[i]]						
-			lepton_num_den_particles[i]+=wp1[i]*lep_density_grid[par_num_cell[i]+1]
-			
-			x_lepton_flux_particles[i]+=wm1[i]*x_flux_lep_density_grid[number_of_cells]
-			x_lepton_flux_particles[i]+=w[i]*x_flux_lep_density_grid[par_num_cell[i]]
-			x_lepton_flux_particles[i]+=wp1[i]*x_flux_lep_density_grid[par_num_cell[i]+1]
-			
-			y_lepton_flux_particles[i]+=wm1[i]*y_flux_lep_density_grid[number_of_cells]
-			y_lepton_flux_particles[i]+=w[i]*y_flux_lep_density_grid[par_num_cell[i]]
-			y_lepton_flux_particles[i]+=wp1[i]*y_flux_lep_density_grid[par_num_cell[i]+1]
-			
-			z_lepton_flux_particles[i]+=wm1[i]*z_flux_lep_density_grid[number_of_cells]
-			z_lepton_flux_particles[i]+=w[i]*z_flux_lep_density_grid[par_num_cell[i]]
-			z_lepton_flux_particles[i]+=wp1[i]*z_flux_lep_density_grid[par_num_cell[i]+1]
-														
+																	
 		elseif par_num_cell[i]==number_of_cells
 			number_den_particles[i]+=wm1[i]*num_den_grid[par_num_cell[i]-1]
 			number_den_particles[i]+=w[i]*num_den_grid[par_num_cell[i]]
@@ -510,24 +428,7 @@ function interpolation_from_grid_to_particles(wm1,w,wp1,par_num_cell,data_from_g
 
 			z_flux_bar_particles[i]+=wm1[i]*z_flux_bar_grid[par_num_cell[i]-1]
 			z_flux_bar_particles[i]+=w[i]*z_flux_bar_grid[par_num_cell[i]]
-			z_flux_bar_particles[i]+=wp1[i]*z_flux_bar_grid[1]
-
-			lepton_num_den_particles[i]+=wm1[i]*lep_density_grid[par_num_cell[i]-1]						
-			lepton_num_den_particles[i]+=w[i]*lep_density_grid[par_num_cell[i]]						
-			lepton_num_den_particles[i]+=wp1[i]*lep_density_grid[1]
-			
-			x_lepton_flux_particles[i]+=wm1[i]*x_flux_lep_density_grid[par_num_cell[i]-1]
-			x_lepton_flux_particles[i]+=w[i]*x_flux_lep_density_grid[par_num_cell[i]]
-			x_lepton_flux_particles[i]+=wp1[i]*x_flux_lep_density_grid[1]
-			
-			y_lepton_flux_particles[i]+=wm1[i]*y_flux_lep_density_grid[par_num_cell[i]-1]
-			y_lepton_flux_particles[i]+=w[i]*y_flux_lep_density_grid[par_num_cell[i]]
-			y_lepton_flux_particles[i]+=wp1[i]*y_flux_lep_density_grid[1]
-			
-			z_lepton_flux_particles[i]+=wm1[i]*z_flux_lep_density_grid[par_num_cell[i]-1]
-			z_lepton_flux_particles[i]+=w[i]*z_flux_lep_density_grid[par_num_cell[i]]
-			z_lepton_flux_particles[i]+=wp1[i]*z_flux_lep_density_grid[1]									
-					 
+			z_flux_bar_particles[i]+=wp1[i]*z_flux_bar_grid[1]			 
 		else
 			number_den_particles[i]+=wm1[i]*num_den_grid[par_num_cell[i]-1]
 			number_den_particles[i]+=w[i]*num_den_grid[par_num_cell[i]]
@@ -561,27 +462,12 @@ function interpolation_from_grid_to_particles(wm1,w,wp1,par_num_cell,data_from_g
 			z_flux_bar_particles[i]+=w[i]*z_flux_bar_grid[par_num_cell[i]]
 			z_flux_bar_particles[i]+=wp1[i]*z_flux_bar_grid[par_num_cell[i]+1]
 			
-			lepton_num_den_particles[i]+=wm1[i]*lep_density_grid[par_num_cell[i]-1]						
-			lepton_num_den_particles[i]+=w[i]*lep_density_grid[par_num_cell[i]]						
-			lepton_num_den_particles[i]+=wp1[i]*lep_density_grid[par_num_cell[i]+1]
-			
-			x_lepton_flux_particles[i]+=wm1[i]*x_flux_lep_density_grid[par_num_cell[i]-1]
-			x_lepton_flux_particles[i]+=w[i]*x_flux_lep_density_grid[par_num_cell[i]]
-			x_lepton_flux_particles[i]+=wp1[i]*x_flux_lep_density_grid[par_num_cell[i]+1]
-			
-			y_lepton_flux_particles[i]+=wm1[i]*y_flux_lep_density_grid[par_num_cell[i]-1]
-			y_lepton_flux_particles[i]+=w[i]*y_flux_lep_density_grid[par_num_cell[i]]
-			y_lepton_flux_particles[i]+=wp1[i]*y_flux_lep_density_grid[1]
-			
-			z_lepton_flux_particles[i]+=wm1[i]*z_flux_lep_density_grid[par_num_cell[i]-1]
-			z_lepton_flux_particles[i]+=w[i]*z_flux_lep_density_grid[par_num_cell[i]]
-			z_lepton_flux_particles[i]+=wp1[i]*z_flux_lep_density_grid[par_num_cell[i]+1]					
-		end	
+		end
 	end
-	return number_den_particles,number_den_bar_particles,x_flux_particles,y_flux_particles,z_flux_particles,x_flux_bar_particles,y_flux_bar_particles,z_flux_bar_particles,lepton_num_den_particles,x_lepton_flux_particles,y_lepton_flux_particles,z_lepton_flux_particles
+	
+	println("Depositing information from grid to particles")							
+	return number_den_particles,number_den_bar_particles,x_flux_particles,y_flux_particles,z_flux_particles,x_flux_bar_particles,y_flux_bar_particles,z_flux_bar_particles
 end
-
-
 
 
 

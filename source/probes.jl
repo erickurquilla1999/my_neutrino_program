@@ -235,6 +235,138 @@ cell_z_lenght=1.0 #cm
 
 println(shape_function(par_pos,cell_center,num_celldd))
 
+
+
+
+
+
+
+
+theta_12=0
+theta_13=0
+theta_23=0
+delta_cp=0
+
+
+
+	s12=sin(theta_12)
+	c12=cos(theta_12)
+	s13=sin(theta_13)
+	c13=cos(theta_13)
+	s23=sin(theta_23)
+	c23=cos(theta_23)
+	sdcp=sin(delta_cp)
+	cdcp=cos(delta_cp)
+
+	U=[c12*c13+0.0im s12*c13+0.0im s13*cdcp-s13*sdcp*im;-s12*c23-c12*s13*s23*cdcp-c12*s13*s23*sdcp*im c12*c23-s12*s13*s23*cdcp-s12*s13*s23*sdcp*im c13*s23+0.0im;s12*s23-c12*s13*c23*cdcp-c12*s13*c23*sdcp*im -c12*s23-s12*s13*c23*cdcp-s12*s13*c23*sdcp*im c13*c23+0.0im]
+
+U=[1 2;3 4]
+println(U)
+
+println(conj(transpose(U)))
+
+print(sin(pi/2))
+
+
+@time begin
+
+using DifferentialEquations
+
+f(u,p,t) = 1.01*u
+u0 = 1/2
+tspan = (0.0,1.0)
+prob = ODEProblem(f,u0,tspan)
+sol = solve(prob, Tsit5(), reltol=1e-8, abstol=1e-8)
+
+
+println(sol)
+println(" ")
+println(sol.t)
+println(" ")
+println(sol.u)
+println(" ")
+println(typeof(sol))
+
+
+readline()
+
+
+f(u,p,t) = [1.0 0.0;0.0 1.0][0.0 1.0;1.0 0.0]-[0.0 1.0;1.0 0.0][1.0 0.0;0.0 1.0]
+u0 = [1.0 0.0;0.0 1.0]
+tspan = (0.0,0.1)
+prob = ODEProblem(f,u0,tspan)
+sol = solve(prob, Tsit5(), reltol=1e-8, abstol=1e-8)
+
+end
+
+
+println(typeof(typeof(1e-6565)))
+println(typeof(0.0))
+println(typeof([0.0 0.0 0.0;0.0 0.0 0.0;0.0 0.0 0.0]))
+
+q=0.0
+	if string(typeof(q))=="Float64"
+	println("enter")
+	end
+
+
+
+
+function rk4(y_i_dot,t_i,y_i,h)
+	
+	if string(typeof(y_i))=="Float64"
+
+		k1=y_i_dot(t_i,y_i)
+		k2=y_i_dot(t_i+0.5*h,y_i+0.5*k1*h)
+		k3=y_i_dot(t_i+0.5*h,y_i+0.5*k2*h)
+		k4=y_i_dot(t_i+h,y_i+k3*h)
+
+		y_i_p1=y_i+(1/6)*h*(k1+2*k2+2*k3+k4)
+		
+		return y_i_p1
+		
+	elseif string(typeof(y_i))=="Array{Complex{Float64},2}"
+			
+		I=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 1.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 1.0+0.0im]
+		
+		k1_=y_i_dot(t_i,y_i)
+		k2_=y_i_dot(t_i+0.5*h,y_i+0.5*k1_*h*I)
+		k3_=y_i_dot(t_i+0.5*h,y_i+0.5*k2_*h)
+		k4_=y_i_dot(t_i+h,y_i+k3_*h)
+
+		y_i_p1=y_i+(1/6)*h*(k1_+2*k2_+2*k3_+k4_)
+		
+		return y_i_p1
+	end
+end
+
+function fun(x,y)
+	return y*[1.0+0.0im 0.0 0.0;0.0+0.0im 1.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 1.0+0.0im]
+end
+
+a=rk4(fun,0.0,[1.0+0.0im 0.0 0.0;0.0 1.0 0.0;0.0 0.0 1.0],0.001)
+println(a)
+
+function fun(x,y)
+	return y
+end
+println(rk4(fun,0.0,1.0,0.001))
+
+
+
+
+println(Int(1.00))
+
+
+function dd()
+a=1
+for i in collect(1:Int(number_of_steps))
+a=+a
+println(i)
+end
+end
+
+dd()
 =#
 
 
@@ -251,8 +383,10 @@ println(shape_function(par_pos,cell_center,num_celldd))
 
 
 
-
-
+a=56
+b=string(a)
+println(b)
+println(typeof(b))
 
 
 
