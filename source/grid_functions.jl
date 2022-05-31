@@ -10,7 +10,9 @@ include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my
 # compute cells centers in base of imput parameters
 
 function cells_center()	
-
+	
+	println("Computing cell center")	
+	
 	x_grid_center=Array{Float64,1}(undef,0)
 	y_grid_center=Array{Float64,1}(undef,0)
 	z_grid_center=Array{Float64,1}(undef,0)
@@ -20,8 +22,6 @@ function cells_center()
 		push!(y_grid_center,cell_y_lenght/2)
 		push!(z_grid_center,cell_z_lenght/2)
 	end
-	
-	println("Computing cell center")	
 	return x_grid_center,y_grid_center,z_grid_center
 end
 
@@ -39,26 +39,26 @@ end
 
 function particles_number_cell(x_par,y_par,z_par)
 
-	particle_num_cell=Array{Int128,1}(undef,0)
+	println("Computing number cell the particles below")	
 
+	particle_num_cell=Array{Int128,1}(undef,0)
+	
 	for i in eachindex(x_par)
 		
 		dec,int=modf(x_par[i]/cell_x_lenght)
 		
-		int+=1.0		
-		if (0.0<=dec<=1.0)&&(1<=int<=number_of_cells)&&(0.0<=y_par[i]<=cell_y_lenght)&&(0.0<=z_par[i]<=cell_z_lenght)
-			push!(particle_num_cell,trunc(Int128,int))
-		elseif dec==0.0&&int==number_of_cells+1.0
-			push!(particle_num_cell,trunc(Int128,int-1.0))
+		int+=1.0
+				
+		if (0.0<=dec<=1.0)&&(1.0<=int<=convert(Float64,number_of_cells))&&(0.0<=y_par[i]<=cell_y_lenght)&&(0.0<=z_par[i]<=cell_z_lenght)
+			push!(particle_num_cell,convert(Int128,int))
 		else
-			println("A particle was found out of the grid")
-			exit()
+			println("error trying to find the particle")
+			exit()	
 		end
 	end
-	
-	println("Computing number cell the particles below")	
 	return particle_num_cell		
 end
+
 
 
 
@@ -74,6 +74,8 @@ end
 # compute the shape function of the particles
 
 function shape_function(x_par,y_par,z_par,x_cell_center,y_cell_center,z_cell_center,num_cell)
+
+	println("Computing particles shape function")		
 
 	sf_w=Array{Float64,1}(undef,0)	
 	sf_w_p1=Array{Float64,1}(undef,0)	
@@ -123,7 +125,6 @@ function shape_function(x_par,y_par,z_par,x_cell_center,y_cell_center,z_cell_cen
 		push!(sf_w_p1,w_cell_plus_1/(w_cell+w_cell_plus_1+w_cell_minus_1))		
 	end
 	
-	println("Computing particles shape function")		
 	return sf_w_m1,sf_w,sf_w_p1
 end
 
@@ -155,6 +156,8 @@ end
 
 
 function deposition_from_particles_to_grid(x_dir,y_dir,z_dir,rho,rho_bar,N_neutrinos,N_antineutrinos,wm1,w,wp1,par_num_cell)
+
+	println("Depositing information from particle to grid")							
 	
 	nd_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
 	nd_bar_grid=Array{Array{Complex{Float64},2},1}(undef,number_of_cells)
@@ -297,7 +300,6 @@ function deposition_from_particles_to_grid(x_dir,y_dir,z_dir,rho,rho_bar,N_neutr
 	y_flux_bar_grid=y_flux_bar_grid/cell_vol
 	z_flux_bar_grid=z_flux_bar_grid/cell_vol
 	
-	println("Depositing information from particle to grid")							
 	return nd_grid,nd_bar_grid,x_flux_grid,y_flux_grid,z_flux_grid,x_flux_bar_grid,y_flux_bar_grid,z_flux_bar_grid
 end
 
@@ -323,6 +325,8 @@ end
 
 
 function interpolation_from_grid_to_particles(wm1,w,wp1,par_num_cell,data_from_grid) 
+
+	println("Depositing information from grid to particles")							
 
 	num_den_grid=data_from_grid[1]
 	num_den_bar_grid=data_from_grid[2]
@@ -465,7 +469,6 @@ function interpolation_from_grid_to_particles(wm1,w,wp1,par_num_cell,data_from_g
 		end
 	end
 	
-	println("Depositing information from grid to particles")							
 	return number_den_particles,number_den_bar_particles,x_flux_particles,y_flux_particles,z_flux_particles,x_flux_bar_particles,y_flux_bar_particles,z_flux_bar_particles
 end
 

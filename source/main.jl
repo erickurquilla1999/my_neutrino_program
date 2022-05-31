@@ -22,6 +22,7 @@ initial_particles_data=particles_initial_condition(cells__center[1],cells__cente
 # initial_particles_data ---> 9: number of neutrinos
 # initial_particles_data ---> 10: number of antineutrinos
 
+# evolve de system of neutrinos
 evolve_particles(simulation_initial_time,initial_particles_data)
 
 

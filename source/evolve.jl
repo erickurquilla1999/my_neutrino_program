@@ -12,9 +12,15 @@ include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my
 
 function compute_hamiltonians(x_dir,y_dir,z_dir,interpotation_data)
 
+	println("Computing hamiltonians")							
+
 	H_vacuum=Array{Array{Complex{Float64},2},1}(undef,0)
 	H_matter=Array{Array{Complex{Float64},2},1}(undef,0)
 	H_neutrino=Array{Array{Complex{Float64},2},1}(undef,0)
+
+	H_vacuum_bar=Array{Array{Complex{Float64},2},1}(undef,0)
+	H_matter_bar=Array{Array{Complex{Float64},2},1}(undef,0)
+	H_neutrino_bar=Array{Array{Complex{Float64},2},1}(undef,0)
 
 	s12=sin(theta_12)
 	c12=cos(theta_12)
@@ -31,14 +37,20 @@ function compute_hamiltonians(x_dir,y_dir,z_dir,interpotation_data)
 	ham_vacuum=U*mass*U_dagger
 	
 	for i in eachindex(interpotation_data[1])
-		push!(H_vacuum,ham_vacuum)		
+	
+		push!(H_vacuum,ham_vacuum)
+		push!(H_vacuum_bar,conj(ham_vacuum))				
+	
 		ham_neutrinos=sqrt(2)*Gf*(hbar*c)^3*((interpotation_data[1][i]-conj(interpotation_data[2][i]))-x_dir[i]*(interpotation_data[3][i]-conj(interpotation_data[6][i]))-y_dir[i]*(interpotation_data[4][i]-conj(interpotation_data[7][i]))-z_dir[i]*(interpotation_data[5][i]-conj(interpotation_data[8][i])))
+		
 		push!(H_matter,[ham_neutrinos[1,1] 0.0+0.0im 0.0+0.0im;0.0+0.0im ham_neutrinos[2,2] 0.0+0.0im;0.0+0.0im 0.0+0.0im ham_neutrinos[3,3]])
+		push!(H_matter_bar,-conj(H_matter[i]))
+						
 		push!(H_neutrino,ham_neutrinos)
+		push!(H_neutrino_bar,-conj(ham_neutrinos))
 	end
 
-	println("Computing hamiltonians")							
-	return H_vacuum,H_matter,H_neutrino
+	return H_vacuum,H_matter,H_neutrino,H_vacuum_bar,H_matter_bar,H_neutrino_bar
 
 end
 
@@ -66,17 +78,18 @@ end
 
 function compute_next_step_particle_data(hamiltonians,initial_data,time)
 
-# initial_particles_data ---> 1: x particle position
-# initial_particles_data ---> 2: y particle position
-# initial_particles_data ---> 3: z particle position
-# initial_particles_data ---> 4: x particle direction
-# initial_particles_data ---> 5: y particle direction
-# initial_particles_data ---> 6: z particle direction
-# initial_particles_data ---> 7: rho neutrinos
-# initial_particles_data ---> 8: rho bar antineutrinos 
-# initial_particles_data ---> 9: number of neutrinos
-# initial_particles_data ---> 10: number of antineutrinos
+	println("Computing next step particles varibles")							
 
+	# initial_particles_data ---> 1: x particle position
+	# initial_particles_data ---> 2: y particle position
+	# initial_particles_data ---> 3: z particle position
+	# initial_particles_data ---> 4: x particle direction
+	# initial_particles_data ---> 5: y particle direction
+	# initial_particles_data ---> 6: z particle direction
+	# initial_particles_data ---> 7: rho neutrinos
+	# initial_particles_data ---> 8: rho bar antineutrinos 
+	# initial_particles_data ---> 9: number of neutrinos
+	# initial_particles_data ---> 10: number of antineutrinos
 
 	x=initial_data[1]
 	y=initial_data[2]
@@ -87,6 +100,9 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 	H_vacuum=hamiltonians[1]
 	H_matter=hamiltonians[2]
 	H_neutrino=hamiltonians[3]
+	H_vacuum_bar=hamiltonians[4]
+	H_matter_bar=hamiltonians[5]
+	H_neutrino_bar=hamiltonians[6]
 
 	x_particle_position=Array{Float64,1}(undef,0)
 	y_particle_position=Array{Float64,1}(undef,0)
@@ -106,21 +122,39 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 			return c*initial_data[6][i]
 		end		
 		function rho_dot(t,rho_)
-			return (-im/hbar)*((H_vacuum[1][i]+H_matter[2][i]+H_neutrino[3][i])*rho_-rho_*(H_vacuum[1][i]+H_matter[2][i]+H_neutrino[3][i]))
+			return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
 		end
-		function rho_bar_dot(t,rho_)
-			return (-im/hbar)*((H_vacuum[1][i]+H_matter[2][i]+H_neutrino[3][i])*rho_-rho_*(H_vacuum[1][i]+H_matter[2][i]+H_neutrino[3][i]))
+		function rho_bar_dot(t,rho_bar)
+			return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar-rho_bar*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
 		end
-
 
 		push!(x_particle_position,rk4(position_x_dot,time,x[i],time_step))
 		push!(y_particle_position,rk4(position_y_dot,time,y[i],time_step))	
 		push!(z_particle_position,rk4(position_z_dot,time,z[i],time_step))
 		push!(particles_rho,rk4(rho_dot,time,rho[i],time_step))	
 		push!(particles_rho_bar,rk4(rho_bar_dot,time,rho_bar[i],time_step))	
+
+		# periodic boundary conditions for particle position position
+
+		if x_particle_position[i]<0.0
+			x_particle_position[i]=cell_x_lenght*number_of_cells+x_particle_position[i]
+		elseif x_particle_position[i]>=cell_x_lenght*number_of_cells
+			x_particle_position[i]=x_particle_position[i]-cell_x_lenght*number_of_cells
+		end
+				
+		if y_particle_position[i]<0.0
+			y_particle_position[i]=cell_y_lenght+y_particle_position[i]
+		elseif y_particle_position[i]>=cell_y_lenght
+			y_particle_position[i]=y_particle_position[i]-cell_y_lenght
+		end
+
+		if z_particle_position[i]<0.0
+			z_particle_position[i]=cell_z_lenght+z_particle_position[i]
+		elseif z_particle_position[i]>=cell_z_lenght
+			z_particle_position[i]=z_particle_position[i]-cell_z_lenght
+		end
 	
 	end
-	println("Computing next step particles varibles")							
 	return x_particle_position,y_particle_position,z_particle_position,initial_data[4],initial_data[5],initial_data[6],particles_rho,particles_rho_bar,initial_data[9],initial_data[10]
 end
 
@@ -153,16 +187,19 @@ function evolve_particles(simulation_time,initial_particles_data)
 	# initial_particles_data ---> 8: rho bar antineutrinos 
 	# initial_particles_data ---> 9: number of neutrinos
 	# initial_particles_data ---> 10: number of antineutrinos
+
+	#writting particles initial condition
+	write_info("step_0.txt",initial_particles_data,simulation_time)
 	
 	println(".......................................")							
 	println("Start particle evolution")							
 	println(".......................................")							
-	
+		
 
 		
 	for a in collect(1:number_of_steps)
-		
-		println(initial_particles_data[7][1])	
+	
+		write_info("step_$a.txt",initial_particles_data,simulation_time)
 			
 		print("time: ")
 		print(simulation_time)
@@ -170,8 +207,8 @@ function evolve_particles(simulation_time,initial_particles_data)
 		println(a)
 		
 		particles__number_cell=particles_number_cell(initial_particles_data[1],initial_particles_data[2],initial_particles_data[3])
-		# particles__number_cell ---> array of the number of cell the particles bellows
-
+		# particles__number_cell ---> 1: array of the number of cell the particles bellows
+		
 		shape_func=shape_function(initial_particles_data[1],initial_particles_data[2],initial_particles_data[3],cells__center[1],cells__center[2],cells__center[3],particles__number_cell)
 		# shape_func ---> 1: w previous cell
 		# shape_func ---> 2: w actual cell
@@ -197,13 +234,15 @@ function evolve_particles(simulation_time,initial_particles_data)
 		# particle_interpolation_data ---> 7: y antineutrinos number density flux
 		# particle_interpolation_data ---> 8: z antineutrinos number density flux
 		
-		println(particle_interpolation_data[[1][1]])
-		
 		hamiltonians=compute_hamiltonians(initial_particles_data[4],initial_particles_data[5],initial_particles_data[6],particle_interpolation_data)
-
-		new_initial_particle_data=compute_next_step_particle_data(hamiltonians,initial_particles_data,simulation_time)
-		
-		initial_particles_data=new_initial_particle_data
+		# hamiltonians ---> 1: neutrinos vacuum  
+		# hamiltonians ---> 2: neutrinos-matter  
+		# hamiltonians ---> 3: neutrinos-neutrinos  
+		# hamiltonians ---> 4: antineutrinos vacuum  
+		# hamiltonians ---> 5: antineutrinos-matter  
+		# hamiltonians ---> 6: antineutrinos-antineutrinos  
+						
+		initial_particles_data=compute_next_step_particle_data(hamiltonians,initial_particles_data,simulation_time)
 		
 		simulation_time+=time_step
 		
