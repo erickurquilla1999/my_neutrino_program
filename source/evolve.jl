@@ -2,14 +2,6 @@ include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/constants.jl")
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/numerical_methods.jl")
 
-
-
-
-
-
-
-
-
 function compute_hamiltonians(x_dir,y_dir,z_dir,interpotation_data)
 
 	println("Computing hamiltonians")							
@@ -43,7 +35,7 @@ function compute_hamiltonians(x_dir,y_dir,z_dir,interpotation_data)
 	
 		ham_neutrinos=sqrt(2)*Gf*(hbar*c)^3*((interpotation_data[1][i]-conj(interpotation_data[2][i]))-x_dir[i]*(interpotation_data[3][i]-conj(interpotation_data[6][i]))-y_dir[i]*(interpotation_data[4][i]-conj(interpotation_data[7][i]))-z_dir[i]*(interpotation_data[5][i]-conj(interpotation_data[8][i])))
 		
-		push!(H_matter,[ham_neutrinos[1,1] 0.0+0.0im 0.0+0.0im;0.0+0.0im ham_neutrinos[2,2] 0.0+0.0im;0.0+0.0im 0.0+0.0im ham_neutrinos[3,3]])
+		push!(H_matter,[e_lepton_density 0.0+0.0im 0.0+0.0im;0.0+0.0im u_lepton_density 0.0+0.0im;0.0+0.0im 0.0+0.0im t_lepton_density])
 		push!(H_matter_bar,-conj(H_matter[i]))
 						
 		push!(H_neutrino,ham_neutrinos)

@@ -25,5 +25,5 @@ Manifest.toml
 
 
 
-/output/step*
+step*
 /source/probes.jl
