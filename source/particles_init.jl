@@ -174,28 +174,28 @@ function write_info(name,particle_data,time)
 			#rho_bar32=real(particle_data[4][i][3,2])
 			rho_bar33=real(particle_data[4][i][3,3])
 
-			rho11_im=imag(particle_data[5][i][1,1])
-			rho12_im=imag(particle_data[5][i][1,2])
-			rho13_im=imag(particle_data[5][i][1,3])
-			#rho21_im=imag(particle_data[5][i][2,1])
-			rho22_im=imag(particle_data[5][i][2,2])
-			rho23_im=imag(particle_data[5][i][2,3])
-			#rho31_im=imag(particle_data[5][i][3,1])
-			#rho32_im=imag(particle_data[5][i][3,2])
-			rho33_im=imag(particle_data[5][i][3,3])
+			rho11_im=imag(particle_data[3][i][1,1])
+			rho12_im=imag(particle_data[3][i][1,2])
+			rho13_im=imag(particle_data[4][i][1,3])
+			#rho21_im=imag(particle_data[3][i][2,1])
+			rho22_im=imag(particle_data[3][i][2,2])
+			rho23_im=imag(particle_data[3][i][2,3])
+			#rho31_im=imag(particle_data[3][i][3,1])
+			#rho32_im=imag(particle_data[3][i][3,2])
+			rho33_im=imag(particle_data[3][i][3,3])
 			
-			rho_bar11_im=imag(particle_data[6][i][1,1])
-			rho_bar12_im=imag(particle_data[6][i][1,2])
-			rho_bar13_im=imag(particle_data[6][i][1,3])
-			#rho_bar21_im=imag(particle_data[6][i][2,1])
-			rho_bar22_im=imag(particle_data[6][i][2,2])
-			rho_bar23_im=imag(particle_data[6][i][2,3])
-			#rho_bar31_im=imag(particle_data[6][i][3,1])
-			#rho_bar32_im=imag(particle_data[6][i][3,2])
-			rho_bar33_im=imag(particle_data[6][i][3,3])
+			rho_bar11_im=imag(particle_data[4][i][1,1])
+			rho_bar12_im=imag(particle_data[4][i][1,2])
+			rho_bar13_im=imag(particle_data[4][i][1,3])
+			#rho_bar21_im=imag(particle_data[4][i][2,1])
+			rho_bar22_im=imag(particle_data[4][i][2,2])
+			rho_bar23_im=imag(particle_data[4][i][2,3])
+			#rho_bar31_im=imag(particle_data[4][i][3,1])
+			#rho_bar32_im=imag(particle_data[4][i][3,2])
+			rho_bar33_im=imag(particle_data[4][i][3,3])
 			
-			N=particle_data[7][i]
-			N_bar=particle_data[8][i]
+			N=particle_data[5][i]
+			N_bar=particle_data[6][i]
 			
 			t=time
 

@@ -1,14 +1,19 @@
 # grid parameters
 number_of_cells=64 #need to be at least 3
 cell_x_lenght=1.0 #cm
+cell_y_lenght=1.0 #cm
+cell_z_lenght=1.0 #cm
 
 # particles initial parameter
 particles_number_density=4.891290819e+32 #cm-1
 perturbation_amplitud=1.0e-6
 
 e_lepton_density=0.0
+e_bar_lepton_density=0.0
 u_lepton_density=0.0
+u_bar_lepton_density=0.0
 t_lepton_density=0.0
+t_bar_lepton_density=0.0
 
 theta_12=1e-6*pi/180
 theta_13=48.3*pi/180
