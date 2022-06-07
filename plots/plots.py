@@ -48,7 +48,7 @@ rho23_av=[]
 rho11=[]
 rho22=[]
 
-for i in range(0,10000):
+for i in range(0,1000):
 	data = np.loadtxt("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/output/step_"+str(i)+".txt", unpack = True, skiprows=1)
 	
 	time.append(data[32][30])
