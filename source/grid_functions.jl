@@ -1,28 +1,22 @@
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/input_parameters.jl")
 
-
-
-
-
-
-
-
 # compute cells centers in base of imput parameters
 
 function cells_center()	
 	
 	println("Computing cell center")	
 	
-	x_grid_center=Array{Float64,1}(undef,0)
-	y_grid_center=Array{Float64,1}(undef,0)
-	z_grid_center=Array{Float64,1}(undef,0)
+	x_grid_center=fill(0.0,number_of_cells+2)
 	
-	for i in collect(1:number_of_cells)
-		push!(x_grid_center,cell_x_lenght*i-cell_x_lenght/2)
-		push!(y_grid_center,cell_y_lenght/2)
-		push!(z_grid_center,cell_z_lenght/2)
+	x_grid_center[1]=-cell_x_lenght/2 #first ghost zone
+	x_grid_center[number_of_cells+2]=cell_x_lenght*number_of_cells+cell_x_lenght/2 #last ghost zone
+
+	for i in collect(2:(number_of_cells+1))
+		x_grid_center[i]=cell_x_lenght*(i-2)+cell_x_lenght/2
 	end
-	return x_grid_center,y_grid_center,z_grid_center
+
+	return x_grid_center
+
 end
 
 
@@ -37,22 +31,20 @@ end
 # find the number cell a particle bellow
 # return an array with the number of cell the particles below
 
-function particles_number_cell(x_par,y_par,z_par)
+function particles_number_cell(x_par)
 
 	println("Computing number cell the particles below")	
 
-	particle_num_cell=Array{Int128,1}(undef,0)
+	particle_num_cell=fill(0,length(x_par)) 
 	
 	for i in eachindex(x_par)
 		
-		dec,int=modf(x_par[i]/cell_x_lenght)
-		
-		int+=1.0
+		dec,int=modf((x_par[i]/cell_x_lenght)+2.0)
 				
-		if (0.0<=dec<=1.0)&&(1.0<=int<=convert(Float64,number_of_cells))&&(0.0<=y_par[i]<=cell_y_lenght)&&(0.0<=z_par[i]<=cell_z_lenght)
-			push!(particle_num_cell,convert(Int128,int))
+		if (0.0<=dec<=1.0)&&(1.0<=int<=convert(Float64,number_of_cells))
+			particle_num_cell[i]=convert(Int128,int)
 		else
-			println("error trying to find the particle")
+			println("error trying to find the particle, the time_step is too big")
 			exit()	
 		end
 	end
@@ -60,7 +52,7 @@ function particles_number_cell(x_par,y_par,z_par)
 end
 
 
-
+3
 
 
 
@@ -73,40 +65,36 @@ end
 
 # compute the shape function of the particles
 
-function shape_function(x_par,y_par,z_par,x_cell_center,y_cell_center,z_cell_center,num_cell)
+function shape_function(x_par,x_cell_center,num_cell)
 
 	println("Computing particles shape function")		
 
-	sf_w=Array{Float64,1}(undef,0)	
-	sf_w_p1=Array{Float64,1}(undef,0)	
-	sf_w_m1=Array{Float64,1}(undef,0)		
+	sf_w    = fill(0.0,length(x_par)) 	
+	sf_w_p1 = fill(0.0,length(x_par)) 	
+	sf_w_m1 = fill(0.0,length(x_par)) 		
 
-
+	function shape_function_form(distance)
+		sf_a=-1.0/cell_x_lenght^2
+		sf_c=1.0
+		return(sf_a*distance^2+sf_c)		
+	end
+	
 	for i in eachindex(x_par)
 
 		#distance from particle to the center of its grid cell
-		d_cell=sqrt((x_par[i]-x_cell_center[num_cell[i]])^2+(y_par[i]-y_cell_center[num_cell[i]])^2+(z_par[i]-z_cell_center[num_cell[i]])^2)
+		d_cell=x_cell_center[num_cell[i]]-x_par[i]
 
 		#distance from particle to the center of the next grid cell
-		if num_cell[i]==number_of_cells
-			d_cell_plus_1=sqrt((x_par[i]-(x_cell_center[num_cell[i]]+cell_x_lenght))^2+(y_par[i]-y_cell_center[num_cell[i]])^2+(z_par[i]-z_cell_center[num_cell[i]])^2)					
-		else
-			d_cell_plus_1=sqrt((x_par[i]-x_cell_center[num_cell[i]+1])^2+(y_par[i]-y_cell_center[num_cell[i]+1])^2+(z_par[i]-z_cell_center[num_cell[i]+1])^2)				
-		end
+		d_cell_p1=x_cell_center[num_cell[i]+1]-x_par[i]
 
-		#distance from particle to the center of the last grid cell
-		if num_cell[i]==1
-			d_cell_minus_1=sqrt((x_par[i]-(x_cell_center[num_cell[i]]-cell_x_lenght))^2+(y_par[i]-y_cell_center[num_cell[i]])^2+(z_par[i]-z_cell_center[num_cell[i]])^2)					
-		else
-			d_cell_minus_1=sqrt((x_par[i]-x_cell_center[num_cell[i]-1])^2+(y_par[i]-y_cell_center[num_cell[i]-1])^2+(z_par[i]-z_cell_center[num_cell[i]-1])^2)				
-		end
+		#distance from particle to the center of the last grid cell		
+		d_cell_m1=x_cell_center[num_cell[i]-1]-x_par[i]
+
+	
 		
-		sf_a=-1.0/cell_x_lenght^2
-		sf_c=1.0	
-		
-		w_cell=sf_a*d_cell^2+sf_c
-		w_cell_plus_1=sf_a*d_cell_plus_1^2+sf_c
-		w_cell_minus_1=sf_a*d_cell_minus_1^2+sf_c
+		w_cell         = shape_function_form(d_cell)
+		w_cell_plus_1  = shape_function_form(d_cell)
+		w_cell_minus_1 = shape_function_form(d_cell)
 		
 		if w_cell<0.0
 			w_cell=0.0

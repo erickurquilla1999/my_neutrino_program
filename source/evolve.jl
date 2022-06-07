@@ -73,15 +73,11 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 	println("Computing next step particles varibles")							
 
 	# initial_particles_data ---> 1: x particle position
-	# initial_particles_data ---> 2: y particle position
-	# initial_particles_data ---> 3: z particle position
-	# initial_particles_data ---> 4: x particle direction
-	# initial_particles_data ---> 5: y particle direction
-	# initial_particles_data ---> 6: z particle direction
-	# initial_particles_data ---> 7: rho neutrinos
-	# initial_particles_data ---> 8: rho bar antineutrinos 
-	# initial_particles_data ---> 9: number of neutrinos
-	# initial_particles_data ---> 10: number of antineutrinos
+	# initial_particles_data ---> 2: x particle direction
+	# initial_particles_data ---> 3: rho neutrinos
+	# initial_particles_data ---> 4: rho bar antineutrinos
+	# initial_particles_data ---> 5: number of neutrinos
+	# initial_particles_data ---> 6: number of antineutrinos
 
 	x=initial_data[1]
 	y=initial_data[2]
@@ -170,15 +166,11 @@ end
 function evolve_particles(simulation_time,initial_particles_data)
 
 	# initial_particles_data ---> 1: x particle position
-	# initial_particles_data ---> 2: y particle position
-	# initial_particles_data ---> 3: z particle position
-	# initial_particles_data ---> 4: x particle direction
-	# initial_particles_data ---> 5: y particle direction
-	# initial_particles_data ---> 6: z particle direction
-	# initial_particles_data ---> 7: rho neutrinos
-	# initial_particles_data ---> 8: rho bar antineutrinos 
-	# initial_particles_data ---> 9: number of neutrinos
-	# initial_particles_data ---> 10: number of antineutrinos
+	# initial_particles_data ---> 2: x particle direction
+	# initial_particles_data ---> 3: rho neutrinos
+	# initial_particles_data ---> 4: rho bar antineutrinos 
+	# initial_particles_data ---> 5: number of neutrinos
+	# initial_particles_data ---> 6: number of antineutrinos
 
 	#writting particles initial condition
 	write_info("step_0.txt",initial_particles_data,simulation_time)
@@ -187,21 +179,17 @@ function evolve_particles(simulation_time,initial_particles_data)
 	println("Start particle evolution")							
 	println(".......................................")							
 		
-
-		
 	for a in collect(1:number_of_steps)
-	
-		write_info("step_$a.txt",initial_particles_data,simulation_time)
-			
+				
 		print("time: ")
 		print(simulation_time)
 		print(" step: ")
 		println(a)
 		
-		particles__number_cell=particles_number_cell(initial_particles_data[1],initial_particles_data[2],initial_particles_data[3])
+		particles__number_cell=particles_number_cell(initial_particles_data[1])
 		# particles__number_cell ---> 1: array of the number of cell the particles bellows
 		
-		shape_func=shape_function(initial_particles_data[1],initial_particles_data[2],initial_particles_data[3],cells__center[1],cells__center[2],cells__center[3],particles__number_cell)
+		shape_func=shape_function(initial_particles_data[1],cells__center,particles__number_cell)
 		# shape_func ---> 1: w previous cell
 		# shape_func ---> 2: w actual cell
 		# shape_func ---> 3: w nest cell
@@ -237,7 +225,9 @@ function evolve_particles(simulation_time,initial_particles_data)
 		initial_particles_data=compute_next_step_particle_data(hamiltonians,initial_particles_data,simulation_time)
 		
 		simulation_time+=time_step
-		
+
+		write_info("step_$a.txt",initial_particles_data,simulation_time)
+				
 		println(".......................................")							
 	end
 
