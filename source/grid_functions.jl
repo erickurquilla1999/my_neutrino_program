@@ -1,6 +1,7 @@
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/input_parameters.jl")
 
 # compute cells centers in base of imput parameters
+# two ghost zone at the begining and at the end are included
 
 function cells_center()	
 	
@@ -27,7 +28,6 @@ end
 
 
 
-
 # find the number cell a particle bellow
 # return an array with the number of cell the particles below
 
@@ -44,7 +44,7 @@ function particles_number_cell(x_par)
 		if (0.0<=dec<=1.0)&&(2.0<=int<=convert(Float64,(number_of_cells+1.0)))
 			particle_num_cell[i]=convert(Int128,int)
 		else
-			println("error trying to find the particle, the time_step is too big")
+			println("error trying to find the particle, the particle start the simulation out of the cells or the time_step is too big")
 			exit()	
 		end
 	end
@@ -52,7 +52,6 @@ function particles_number_cell(x_par)
 end
 
 
-3
 
 
 
@@ -74,9 +73,8 @@ function shape_function(x_par,x_cell_center,num_cell)
 	sf_w_m1 = fill(0.0,length(x_par)) 		
 
 	function shape_function_form(distance)
-		sf_a=-1.0/cell_x_lenght^2
-		sf_c=1.0
-		return(sf_a*distance^2+sf_c)		
+		sf_a=-1.0/(3*cell_x_lenght/2)^2
+		return(sf_a*distance^2+1)		
 	end
 	
 	for i in eachindex(x_par)
@@ -182,7 +180,7 @@ function deposition_from_particles_to_grid(particle_info,shape_func,par_num_cell
 	x_flux_grid[number_of_cells+2]     +=x_flux_grid[2]
 	x_flux_bar_grid[number_of_cells+2] +=x_flux_bar_grid[2]
 	
-	cell_vol=cell_x_lenght*cell_y_lenght*cell_z_lenght
+	cell_vol=cell_x_lenght^3
 	
 	nd_grid=nd_grid/cell_vol		
 	nd_bar_grid=nd_bar_grid/cell_vol	
@@ -247,13 +245,18 @@ function interpolation_from_grid_to_particles(shape_func,par_num_cell,data_from_
 		x_flux_particles[i]+=wm1[i]*x_flux_grid[par_num_cell[i]-1]
 		x_flux_particles[i]+=w[i]*x_flux_grid[par_num_cell[i]]
 		x_flux_particles[i]+=wp1[i]*x_flux_grid[par_num_cell[i]+1]
-
+		
 		x_flux_bar_particles[i]+=wm1[i]*x_flux_bar_grid[par_num_cell[i]-1]
 		x_flux_bar_particles[i]+=w[i]*x_flux_bar_grid[par_num_cell[i]]
 		x_flux_bar_particles[i]+=wp1[i]*x_flux_bar_grid[par_num_cell[i]+1]
 	
 	end
 	
+		println(number_den_particles[4][1,1])		
+		println(number_den_bar_particles[4][1,1])
+		println(x_flux_particles[4][1,1])
+		println(x_flux_bar_particles[4][1,1])		
+
 	return number_den_particles,number_den_bar_particles,x_flux_particles,x_flux_bar_particles
 
 end

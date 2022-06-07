@@ -39,8 +39,8 @@ function particles_initial_condition(x__grid_center)
 		
 		particles_rho_bar[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
 
-		number_of_neutrinos[2i-3]=particles_number_density*cell_x_lenght*cell_y_lenght*cell_z_lenght
-		number_of_antineutrinos[2i-3]=particles_number_density*cell_x_lenght*cell_y_lenght*cell_z_lenght						
+		number_of_neutrinos[2i-3]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3
+		number_of_antineutrinos[2i-3]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3					
 		
 		#particle to the left
 		
@@ -60,8 +60,9 @@ function particles_initial_condition(x__grid_center)
 		rho33=perturbation_amplitud*rand(Float64)
 		particles_rho_bar[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
 
-		number_of_neutrinos[2i-2]=particles_number_density*cell_x_lenght*cell_y_lenght*cell_z_lenght
-		number_of_antineutrinos[2i-2]=particles_number_density*cell_x_lenght*cell_y_lenght*cell_z_lenght						
+		number_of_neutrinos[2i-2]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3
+		number_of_antineutrinos[2i-2]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3					
+		
 
 	end
 	
