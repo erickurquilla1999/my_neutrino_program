@@ -1,6 +1,7 @@
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/input_parameters.jl")
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/constants.jl")
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/numerical_methods.jl")
+include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/deposition_and_interpolation.jl")
 
 function compute_hamiltonians(x_dir,interpotation_data)
 
@@ -51,7 +52,6 @@ function compute_hamiltonians(x_dir,interpotation_data)
 		
 	end
 	
-	println(H_neutrino[4])
 	return H_vacuum,H_matter,H_neutrino,H_vacuum_bar,H_matter_bar,H_neutrino_bar
 
 end
@@ -111,12 +111,12 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 			return c*x_dir[i]
 		end		
 		function rho_dot(t,rho_)
-			return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
-			#return (-im/hbar)*(H_neutrino[i]*rho_-rho_*H_neutrino[i])
+			#return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
+			return (-im/hbar)*(H_neutrino[i]*rho_-rho_*H_neutrino[i])
 		end
 		function rho_bar_dot(t,rho_bar_)
-			return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
-			#return (-im/hbar)*(H_neutrino_bar[i]*rho_bar_-rho_bar_*H_neutrino_bar[i])
+			#return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
+			return (-im/hbar)*(H_neutrino_bar[i]*rho_bar_-rho_bar_*H_neutrino_bar[i])
 		end
 
 		x_particle_position[i] = rk4(position_x_dot,time,x[i],time_step)

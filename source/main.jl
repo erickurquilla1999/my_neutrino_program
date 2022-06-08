@@ -2,6 +2,7 @@ include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/particles_init.jl")
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/input_parameters.jl")
 include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/evolve.jl")
+include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/evolve.jl")
 
 # compute cells centers in base of imput parameters
 cells__center=cells_center() 	

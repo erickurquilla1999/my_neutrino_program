@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #0. x 
-#1. xd 
+#1. x_dir 
 #2. rho11 
 #3. rho12 
 #4. rho13 
@@ -44,7 +44,7 @@ rho23_av=[]
 rho11=[]
 rho22=[]
 
-for i in range(0,1000):
+for i in range(0,5000):
 	data = np.loadtxt("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/output/step_"+str(i)+".txt", unpack = True, skiprows=1)
 	
 	time.append(data[28][30])
