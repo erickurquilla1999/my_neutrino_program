@@ -30,15 +30,17 @@ function particles_initial_condition(x__grid_center)
 		rho22=perturbation_amplitud*rand(Float64)
 		rho33=perturbation_amplitud*rand(Float64)
 		
-		particles_rho[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-		
+		#particles_rho[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+		particles_rho[2i-3]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
+				
 		rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
 		rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
 		rho22=perturbation_amplitud*rand(Float64)
 		rho33=perturbation_amplitud*rand(Float64)
 		
-		particles_rho_bar[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-
+		#particles_rho_bar[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+		particles_rho_bar[2i-3]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
+				
 		number_of_neutrinos[2i-3]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3
 		number_of_antineutrinos[2i-3]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3					
 		
@@ -52,14 +54,17 @@ function particles_initial_condition(x__grid_center)
 		rho22=perturbation_amplitud*rand(Float64)
 		rho33=perturbation_amplitud*rand(Float64)
 		
-		particles_rho[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-		
+		#particles_rho[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+		particles_rho[2i-2]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
+				
 		rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
 		rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
 		rho22=perturbation_amplitud*rand(Float64)
 		rho33=perturbation_amplitud*rand(Float64)
-		particles_rho_bar[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-
+		
+		#particles_rho_bar[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+		particles_rho_bar[2i-2]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
+				
 		number_of_neutrinos[2i-2]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3
 		number_of_antineutrinos[2i-2]=(particles_number_density+particles_number_density*rand(Float64))*cell_x_lenght^3					
 		

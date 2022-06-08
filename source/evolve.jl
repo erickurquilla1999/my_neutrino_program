@@ -36,7 +36,7 @@ function compute_hamiltonians(x_dir,interpotation_data)
 
 	U=[c12*c13+0.0im s12*c13+0.0im s13*cdcp-s13*sdcp*im;-s12*c23-c12*s13*s23*cdcp-c12*s13*s23*sdcp*im c12*c23-s12*s13*s23*cdcp-s12*s13*s23*sdcp*im c13*s23+0.0im;s12*s23-c12*s13*c23*cdcp-c12*s13*c23*sdcp*im -c12*s23-s12*s13*c23*cdcp-s12*s13*c23*sdcp*im c13*c23+0.0im]
 	U_dagger=conj(transpose(U))
-	mass=eV_to_J*[mass_1^2/neutrino_energy+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/neutrino_energy+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im mass_3^2/neutrino_energy+0.0im]
+	mass=eV_to_J*[mass_1^2/(2*neutrino_energy)+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im mass_3^2/(2*neutrino_energy)+0.0im]
 	ham_vacuum=U*mass*U_dagger
 	
 	for i in eachindex(x_dir)
@@ -111,12 +111,12 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 			return c*x_dir[i]
 		end		
 		function rho_dot(t,rho_)
-			#return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
-			return (-im/hbar)*(H_neutrino[i]*rho_-rho_*H_neutrino[i])
+			return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
+			#return (-im/hbar)*(H_vacuum[i]*rho_-rho_*H_vacuum[i])
 		end
 		function rho_bar_dot(t,rho_bar_)
-			#return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
-			return (-im/hbar)*(H_neutrino_bar[i]*rho_bar_-rho_bar_*H_neutrino_bar[i])
+			return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
+			#return (-im/hbar)*(H_vacuum_bar[i]*rho_bar_-rho_bar_*H_vacuum_bar[i])
 		end
 
 		x_particle_position[i] = rk4(position_x_dot,time,x[i],time_step)
