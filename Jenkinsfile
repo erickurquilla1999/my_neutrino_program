@@ -10,5 +10,20 @@ pipeline {
 		sh 'echo Hello World'
 	}}
 
+	//=========================//
+	// Vacuum oscillation test //
+	//=========================//
+	stage('Vacuum Oscillation'){ steps{
+	    dir('source'){
+	        sh 'mkdir output'
+		sh 'julia main.jl'
+	    }
+	    dir('tests'){
+	        sh 'julia vacuum_oscillation_theorical_data.jl'
+		sh 'python3 plot_vacuum_oscillation_test.py'
+		archiveArtifacts artifacts: 'vacuum_test.pdf'
+	    }
+	}}
+
     } // stages{
 } // pipeline{
