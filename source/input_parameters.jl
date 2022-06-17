@@ -22,7 +22,7 @@ neutrino_energy=50.0e+6 #eV
 
 #simulation parameters
 simulation_initial_time=0.0
-time_step=1e-8
+time_step=1e-5
 number_of_steps=200
 
 
