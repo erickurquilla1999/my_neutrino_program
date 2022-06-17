@@ -11,7 +11,7 @@ rho22=[]
 rho33=[]
 
 for i in range(0,200):
-	data = np.loadtxt("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/output/step_"+str(i)+".txt", unpack = True, skiprows=1)
+	data = np.loadtxt("../source/output/step_"+str(i)+".txt", unpack = True, skiprows=1)
 	
 	#data indices
 	#0. x, 1. x_dir
@@ -35,7 +35,7 @@ rho11_teo=[]
 rho22_teo=[]
 rho33_teo=[]
 
-data1 = np.loadtxt("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/tests/vacuum_oscillation_theorical_data.txt", unpack = True, skiprows=1)	
+data1 = np.loadtxt("vacuum_oscillation_theorical_data.txt", unpack = True, skiprows=1)	
 time_teo=data1[0]
 rho11_teo=data1[1]
 rho22_teo=data1[2]

@@ -1,4 +1,4 @@
-include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/input_parameters.jl")
+include("input_parameters.jl")
 
 
 function rk4(y_i_dot,t_i,y_i,h)

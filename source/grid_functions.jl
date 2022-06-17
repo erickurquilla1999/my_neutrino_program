@@ -1,4 +1,4 @@
-include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/input_parameters.jl")
+include("input_parameters.jl")
 
 # compute cells centers in base of imput parameters
 # two ghost zone at the begining and at the end are included
