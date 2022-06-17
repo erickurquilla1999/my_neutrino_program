@@ -41,10 +41,7 @@ rho12_av=[]
 rho13_av=[]
 rho23_av=[]
 
-rho11=[]
-rho22=[]
-
-for i in range(0,5000):
+for i in range(0,200):
 	data = np.loadtxt("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/output/step_"+str(i)+".txt", unpack = True, skiprows=1)
 	
 	time.append(data[28][30])
@@ -75,7 +72,7 @@ plt.plot(time,rho22_av)
 plt.plot(time,rho23_av)
 plt.plot(time,rho33_av)
 plt.legend(["rho11_av","rho12_av","rho13_av","rho22_av","rho23_av","rho33_av"])
-#plt.yscale("log")  
+plt.yscale("log")  
 plt.show()
 
 
