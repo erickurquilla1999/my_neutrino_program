@@ -52,6 +52,6 @@ plt.plot(time_teo,rho22_teo)
 plt.plot(time,rho33)	
 plt.plot(time_teo,rho33_teo)	
 plt.legend([r"$\rho_{11}^{num}$",r"$\rho_{11}^{theo}$",r"$\rho_{22}^{num}$",r"$\rho_{22}^{theo}$",r"$\rho_{33}^{num}$",r"$\rho_{33}^{theo}$"])
-plt.show()
-
+#plt.show()
+plt.savefig("vacuum_test.pdf",bbox_inches='tight')
 
