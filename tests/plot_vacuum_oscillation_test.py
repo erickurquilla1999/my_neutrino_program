@@ -11,7 +11,7 @@ rho22=[]
 rho33=[]
 
 for i in range(0,200):
-	data = np.loadtxt("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/output/step_"+str(i)+".txt", unpack = True, skiprows=1)
+	data = np.loadtxt("../source/output/step_"+str(i)+".txt", unpack = True, skiprows=1)
 	
 	#data indices
 	#0. x, 1. x_dir
@@ -35,7 +35,7 @@ rho11_teo=[]
 rho22_teo=[]
 rho33_teo=[]
 
-data1 = np.loadtxt("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/tests/vacuum_oscillation_theorical_data.txt", unpack = True, skiprows=1)	
+data1 = np.loadtxt("vacuum_oscillation_theorical_data.txt", unpack = True, skiprows=1)	
 time_teo=data1[0]
 rho11_teo=data1[1]
 rho22_teo=data1[2]
@@ -52,6 +52,6 @@ plt.plot(time_teo,rho22_teo)
 plt.plot(time,rho33)	
 plt.plot(time_teo,rho33_teo)	
 plt.legend([r"$\rho_{11}^{num}$",r"$\rho_{11}^{theo}$",r"$\rho_{22}^{num}$",r"$\rho_{22}^{theo}$",r"$\rho_{33}^{num}$",r"$\rho_{33}^{theo}$"])
-plt.show()
-
+#plt.show()
+plt.savefig("vacuum_test.pdf",bbox_inches='tight')
 

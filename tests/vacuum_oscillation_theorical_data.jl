@@ -1,5 +1,5 @@
-include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/input_parameters.jl")
-include("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/source/constants.jl")
+include("../source/input_parameters.jl")
+include("../source/constants.jl")
 
 s12=sin(theta_12)
 c12=cos(theta_12)
@@ -45,7 +45,7 @@ for w in time
 	push!(P13,compute_prob(1,3,w))	
 end
 
-io = open("/home/erickurquilla1999/Documents/physics/thesis/my_neutrino_program/my_neutrino_program/tests/vacuum_oscillation_theorical_data.txt", "w");
+io = open("vacuum_oscillation_theorical_data.txt", "w");
 	write(io, "time rho11 rho22 rho33 \n")
 	for i in eachindex(P11)
 		p11=P11[i]
