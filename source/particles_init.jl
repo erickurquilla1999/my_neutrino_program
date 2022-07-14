@@ -1,7 +1,7 @@
 include("input_parameters.jl")
 
 function particles_initial_condition(x__grid_center)
-
+	
 	println("Creating particles initial condition")								
 	
 	#In this function the particles are created with them initial condition,
@@ -10,8 +10,8 @@ function particles_initial_condition(x__grid_center)
 
 	x_particle_position=fill(0.0,number_of_cells*2)
 	x_particle_direction=fill(0.0,number_of_cells*2)
-	particles_rho=fill(zeros(Complex{Float64},(3,3)),number_of_cells*2)  
-	particles_rho_bar=fill(zeros(Complex{Float64},(3,3)),number_of_cells*2) 
+	particles_rho=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells*2)  
+	particles_rho_bar=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells*2) 
 	number_of_neutrinos=fill(0.0,number_of_cells*2)
 	number_of_antineutrinos=fill(0.0,number_of_cells*2)
 	
@@ -22,131 +22,66 @@ function particles_initial_condition(x__grid_center)
 	for i in collect(2:(number_of_cells+1))
 		
 		#particle to the right
+		
 		x_particle_position[2i-3]=x__grid_center[i]
 		x_particle_direction[2i-3]=1
 					
-		rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
-		rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
-		rho22=perturbation_amplitud*rand(Float64)
-		rho33=perturbation_amplitud*rand(Float64)
-		
-		particles_rho[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-		#particles_rho[2i-3]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
-				
-		rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
-		rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
-		rho22=perturbation_amplitud*rand(Float64)
-		rho33=perturbation_amplitud*rand(Float64)
-		
-		particles_rho_bar[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-		#particles_rho_bar[2i-3]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
-				
-		number_of_neutrinos[2i-3]=(2/3)*(particles_number_density*cell_x_lenght^3)/2		
-		number_of_antineutrinos[2i-3]=(1/3)*(particles_number_density*cell_x_lenght^3)/2		
+		if number_of_flavors==3
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
+			rho22=perturbation_amplitud*rand(Float64)
+			rho33=perturbation_amplitud*rand(Float64)
+			particles_rho[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
+			rho22=perturbation_amplitud*rand(Float64)
+			rho33=perturbation_amplitud*rand(Float64)			
+			particles_rho_bar[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+		elseif number_of_flavors==2
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho22=perturbation_amplitud*rand(Float64)
+			particles_rho[2i-3]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho22=perturbation_amplitud*rand(Float64)
+			particles_rho_bar[2i-3]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
+		end
+													
+		number_of_neutrinos[2i-3]=(particles_number_density*cell_x_lenght^3)/4	
+		number_of_antineutrinos[2i-3]=(particles_number_density*cell_x_lenght^3)/4		
 		
 		#particle to the left
 		
 		x_particle_position[2i-2]=x__grid_center[i]
 		x_particle_direction[2i-2]=-1
 					
-		rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
-		rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
-		rho22=perturbation_amplitud*rand(Float64)
-		rho33=perturbation_amplitud*rand(Float64)
-		
-		particles_rho[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-		#particles_rho[2i-2]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
-				
-		rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
-		rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
-		rho22=perturbation_amplitud*rand(Float64)
-		rho33=perturbation_amplitud*rand(Float64)
-		
-		particles_rho_bar[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-		#particles_rho_bar[2i-2]=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
-				
-		number_of_neutrinos[2i-2]=(1/3)*(particles_number_density*cell_x_lenght^3)/2		
-		number_of_antineutrinos[2i-2]=(2/3)*(particles_number_density*cell_x_lenght^3)/2
+		if number_of_flavors==3
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
+			rho22=perturbation_amplitud*rand(Float64)
+			rho33=perturbation_amplitud*rand(Float64)
+			particles_rho[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
+			rho22=perturbation_amplitud*rand(Float64)
+			rho33=perturbation_amplitud*rand(Float64)			
+			particles_rho_bar[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+		elseif number_of_flavors==2
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho22=perturbation_amplitud*rand(Float64)
+			particles_rho[2i-2]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho22=perturbation_amplitud*rand(Float64)
+			particles_rho_bar[2i-2]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
+		end
+						
+		number_of_neutrinos[2i-2]=(particles_number_density*cell_x_lenght^3)/4	
+		number_of_antineutrinos[2i-2]=(particles_number_density*cell_x_lenght^3)/4
 
 	end
 	
 	return x_particle_position,x_particle_direction,particles_rho,particles_rho_bar,number_of_neutrinos,number_of_antineutrinos
 	
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function rho_perturbation(rho,rho_bar)
-
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function normalization(rho,rho_bar)
-	
-	gellmann_1=[0.0+0.0im 1.0+0.0im 0.0+0.0im;1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
- 	gellmann_2=[0.0+0.0im 0.0-1.0im 0.0+0.0im;0.0+1.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
- 	gellmann_3=[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im -1.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]
- 	gellmann_4=[0.0+0.0im 0.0+0.0im 1.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;1.0+0.0im 0.0+0.0im 0.0+0.0im]
- 	gellmann_5=[0.0+0.0im 0.0+0.0im 0.0-1.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+1.0im 0.0+0.0im 0.0+0.0im]
- 	gellmann_6=[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 1.0+0.0im;0.0+0.0im 1.0+0.0im 0.0+0.0im]
- 	gellmann_7=[0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0-1.0im;0.0+0.0im 0.0+1.0im 1.0+0.0im]
- 	gellmann_8=(1/sqrt(3))*[1.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 1.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im -2.0+0.0im]
-
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function write_info(name,particle_data,time)
 	
@@ -208,47 +143,3 @@ function write_info(name,particle_data,time)
 		end
 	close(io);
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
