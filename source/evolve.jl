@@ -39,7 +39,7 @@ function compute_hamiltonians(x_dir,interpotation_data)
 	
 	elseif number_of_flavors==2
 	
-		U=[c12;-s12;s12 c12]			
+		U=[c12 -s12;s12 c12]			
 		mass=eV_to_J*[mass_1^2/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/(2*neutrino_energy)+0.0im]
 	
 	end
