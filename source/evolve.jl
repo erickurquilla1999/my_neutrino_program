@@ -57,28 +57,6 @@ function compute_hamiltonians(x_dir,interpotation_data)
 
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function compute_next_step_particle_data(hamiltonians,initial_data,time)
 
 	println("Computing next step particles varibles")							
@@ -112,16 +90,12 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 			return c*x_dir[i]
 		end		
 		function rho_dot(t,rho_)
-			#return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
-			return (-im/hbar)*(H_vacuum[i]*rho_-rho_*H_vacuum[i])
-			#return (-im/hbar)*((H_vacuum[i]+H_matter[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]))
-			#return (-im/hbar)*(H_neutrino[i]*rho_-rho_*H_neutrino[i])
+			return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
+
 		end
 		function rho_bar_dot(t,rho_bar_)
-			#return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
-			return (-im/hbar)*(H_vacuum_bar[i]*rho_bar_-rho_bar_*H_vacuum_bar[i])
-			#return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]))
-			#return (-im/hbar)*(H_neutrino_bar[i]*rho_bar_-rho_bar_*H_neutrino_bar[i])
+			return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
+
 		end
 
 		x_particle_position[i] = rk4(position_x_dot,time,x[i],time_step)
@@ -138,38 +112,6 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 	end
 	return x_particle_position,x_dir,particles_rho,particles_rho_bar,initial_data[5],initial_data[6]
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function evolve_particles(simulation_time,initial_particles_data)
 
@@ -232,4 +174,3 @@ function evolve_particles(simulation_time,initial_particles_data)
 	end
 
 end
-
