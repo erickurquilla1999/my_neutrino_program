@@ -17,13 +17,13 @@ function compute_hamiltonians(x_dir,interpotation_data)
 	x_flux     = interpotation_data[3]
 	x_flux_bar = interpotation_data[4]	
 
-	H_vacuum=fill(zeros(Complex{Float64},(3,3)),length(x_dir))
-	H_matter=fill(zeros(Complex{Float64},(3,3)),length(x_dir))
-	H_neutrino=fill(zeros(Complex{Float64},(3,3)),length(x_dir))
+	H_vacuum=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir))
+	H_matter=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir))
+	H_neutrino=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir))
 
-	H_vacuum_bar=fill(zeros(Complex{Float64},(3,3)),length(x_dir))
-	H_matter_bar=fill(zeros(Complex{Float64},(3,3)),length(x_dir))
-	H_neutrino_bar=fill(zeros(Complex{Float64},(3,3)),length(x_dir))
+	H_vacuum_bar=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir))
+	H_matter_bar=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir))
+	H_neutrino_bar=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir))
 
 	s12=sin(theta_12)
 	c12=cos(theta_12)
@@ -32,11 +32,19 @@ function compute_hamiltonians(x_dir,interpotation_data)
 	s23=sin(theta_23)
 	c23=cos(theta_23)
 
-	U=[c12*c13 s12*c13 s13*e^(-im*delta_cp);-s12*c23-c12*s13*s23*e^(im*delta_cp) c12*c23-s12*s13*s23*e^(im*delta_cp) c13*s23;s12*s23-c12*s13*c23*e^(im*delta_cp) -c12*s23-s12*s13*c23*e^(im*delta_cp) c13*c23]	
+	if number_of_flavors==3
+		
+		U=[c12*c13 s12*c13 s13*e^(-im*delta_cp);-s12*c23-c12*s13*s23*e^(im*delta_cp) c12*c23-s12*s13*s23*e^(im*delta_cp) c13*s23;s12*s23-c12*s13*c23*e^(im*delta_cp) -c12*s23-s12*s13*c23*e^(im*delta_cp) c13*c23]	
+		mass=eV_to_J*[mass_1^2/(2*neutrino_energy)+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im mass_3^2/(2*neutrino_energy)+0.0im]
+	
+	elseif number_of_flavors==2
+	
+		U=[c12;-s12;s12 c12]			
+		mass=eV_to_J*[mass_1^2/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/(2*neutrino_energy)+0.0im]
+	
+	end
 	
 	U_dagger=conj(transpose(U))
-	
-	mass=eV_to_J*[mass_1^2/(2*neutrino_energy)+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im mass_3^2/(2*neutrino_energy)+0.0im]
 	
 	ham_vacuum=U*mass*U_dagger
 	
