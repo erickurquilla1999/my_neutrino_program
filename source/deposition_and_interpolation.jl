@@ -44,22 +44,7 @@ function shape_function(x_par,x_cell_center,num_cell)
 	return sf_w_m1,sf_w,sf_w_p1
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#deposition algorithm
 
 function deposition_from_particles_to_grid(particle_info,shape_func,par_num_cell)
 	
@@ -74,11 +59,11 @@ function deposition_from_particles_to_grid(particle_info,shape_func,par_num_cell
 	w=shape_func[2]
 	wp1=shape_func[3]
 	
-	nd_grid=fill(zeros(Complex{Float64},(3,3)),number_of_cells+2) 
-	nd_bar_grid=fill(zeros(Complex{Float64},(3,3)),number_of_cells+2)
+	nd_grid=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells+2) 
+	nd_bar_grid=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells+2)
 	
-	x_flux_grid=fill(zeros(Complex{Float64},(3,3)),number_of_cells+2)
-	x_flux_bar_grid=fill(zeros(Complex{Float64},(3,3)),number_of_cells+2)
+	x_flux_grid=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells+2)
+	x_flux_bar_grid=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells+2)
 
 	for i in eachindex(par_num_cell)
 
@@ -137,26 +122,7 @@ function deposition_from_particles_to_grid(particle_info,shape_func,par_num_cell
 
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#interpolation algorithm
 
 function interpolation_from_grid_to_particles(shape_func,par_num_cell,data_from_grid) 
 
@@ -172,11 +138,11 @@ function interpolation_from_grid_to_particles(shape_func,par_num_cell,data_from_
 	x_flux_grid=data_from_grid[3]
 	x_flux_bar_grid=data_from_grid[4]
 
-	number_den_particles     = fill(zeros(Complex{Float64},(3,3)),number_of_cells*2)
-	number_den_bar_particles = fill(zeros(Complex{Float64},(3,3)),number_of_cells*2)
+	number_den_particles     = fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells*2)
+	number_den_bar_particles = fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells*2)
 	
-	x_flux_particles         = fill(zeros(Complex{Float64},(3,3)),number_of_cells*2)
-	x_flux_bar_particles     = fill(zeros(Complex{Float64},(3,3)),number_of_cells*2)
+	x_flux_particles         = fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells*2)
+	x_flux_bar_particles     = fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),number_of_cells*2)
 	
 	for i in eachindex(par_num_cell)
 	
@@ -201,5 +167,3 @@ function interpolation_from_grid_to_particles(shape_func,par_num_cell,data_from_
 	return number_den_particles,number_den_bar_particles,x_flux_particles,x_flux_bar_particles
 
 end
-
-
