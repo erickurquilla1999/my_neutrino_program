@@ -89,46 +89,83 @@ function write_info(name,particle_data,time)
 	println("Writting $name data")
 	
 	io = open("../output/$name", "w");
-		write(io, "x_position x_direction rho11_re rho12_re rho13_re rho22_re rho23_re rho33_re rho_bar11_re rho_bar12_re rho_bar13_re rho_bar22_re rho_bar23_re rho_bar33_re rho11_im rho12_im rho13_im rho22_im rho23_im rho33_im rho_bar11_im rho_bar12_im rho_bar13_im rho_bar22_im rho_bar23_im rho_bar33_im number_of_neutrinos number_of_antineutrinos time\n")
-		for i in eachindex(particle_data[1])
-			
-			x=particle_data[1][i]
-			xd=particle_data[2][i]
-			
-			rho11=real(particle_data[3][i][1,1])
-			rho12=real(particle_data[3][i][1,2])
-			rho13=real(particle_data[3][i][1,3])
-			rho22=real(particle_data[3][i][2,2])
-			rho23=real(particle_data[3][i][2,3])
-			rho33=real(particle_data[3][i][3,3])
-			
-			rho_bar11=real(particle_data[4][i][1,1])
-			rho_bar12=real(particle_data[4][i][1,2])
-			rho_bar13=real(particle_data[4][i][1,3])
-			rho_bar22=real(particle_data[4][i][2,2])
-			rho_bar23=real(particle_data[4][i][2,3])
-			rho_bar33=real(particle_data[4][i][3,3])
+		
+		if number_of_flavors==3
+		
+			write(io, "x_position x_direction rho11_re rho12_re rho13_re rho22_re rho23_re rho33_re rho_bar11_re rho_bar12_re rho_bar13_re rho_bar22_re rho_bar23_re rho_bar33_re rho11_im rho12_im rho13_im rho22_im rho23_im rho33_im rho_bar11_im rho_bar12_im rho_bar13_im rho_bar22_im rho_bar23_im rho_bar33_im number_of_neutrinos number_of_antineutrinos time\n")
+			for i in eachindex(particle_data[1])
+				
+				x=particle_data[1][i]
+				xd=particle_data[2][i]
+				
+				rho11=real(particle_data[3][i][1,1])
+				rho12=real(particle_data[3][i][1,2])
+				rho13=real(particle_data[3][i][1,3])
+				rho22=real(particle_data[3][i][2,2])
+				rho23=real(particle_data[3][i][2,3])
+				rho33=real(particle_data[3][i][3,3])
+				
+				rho_bar11=real(particle_data[4][i][1,1])
+				rho_bar12=real(particle_data[4][i][1,2])
+				rho_bar13=real(particle_data[4][i][1,3])
+				rho_bar22=real(particle_data[4][i][2,2])
+				rho_bar23=real(particle_data[4][i][2,3])
+				rho_bar33=real(particle_data[4][i][3,3])
 
-			rho11_im=imag(particle_data[3][i][1,1])
-			rho12_im=imag(particle_data[3][i][1,2])
-			rho13_im=imag(particle_data[4][i][1,3])
-			rho22_im=imag(particle_data[3][i][2,2])
-			rho23_im=imag(particle_data[3][i][2,3])
-			rho33_im=imag(particle_data[3][i][3,3])
-			
-			rho_bar11_im=imag(particle_data[4][i][1,1])
-			rho_bar12_im=imag(particle_data[4][i][1,2])
-			rho_bar13_im=imag(particle_data[4][i][1,3])
-			rho_bar22_im=imag(particle_data[4][i][2,2])
-			rho_bar23_im=imag(particle_data[4][i][2,3])
-			rho_bar33_im=imag(particle_data[4][i][3,3])
-			
-			N=particle_data[5][i]
-			N_bar=particle_data[6][i]
-			
-			t=time
+				rho11_im=imag(particle_data[3][i][1,1])
+				rho12_im=imag(particle_data[3][i][1,2])
+				rho13_im=imag(particle_data[4][i][1,3])
+				rho22_im=imag(particle_data[3][i][2,2])
+				rho23_im=imag(particle_data[3][i][2,3])
+				rho33_im=imag(particle_data[3][i][3,3])
+				
+				rho_bar11_im=imag(particle_data[4][i][1,1])
+				rho_bar12_im=imag(particle_data[4][i][1,2])
+				rho_bar13_im=imag(particle_data[4][i][1,3])
+				rho_bar22_im=imag(particle_data[4][i][2,2])
+				rho_bar23_im=imag(particle_data[4][i][2,3])
+				rho_bar33_im=imag(particle_data[4][i][3,3])
+				
+				N=particle_data[5][i]
+				N_bar=particle_data[6][i]
+				
+				t=time
 
-			write(io, "$x $xd $rho11 $rho12 $rho13 $rho22 $rho23 $rho33 $rho_bar11 $rho_bar12 $rho_bar13 $rho_bar22 $rho_bar23 $rho_bar33 $rho11_im $rho12_im $rho13_im $rho22_im $rho23_im $rho33_im $rho_bar11_im $rho_bar12_im $rho_bar13_im $rho_bar22_im $rho_bar23_im $rho_bar33_im $N $N_bar $t\n")
-		end
+				write(io, "$x $xd $rho11 $rho12 $rho13 $rho22 $rho23 $rho33 $rho_bar11 $rho_bar12 $rho_bar13 $rho_bar22 $rho_bar23 $rho_bar33 $rho11_im $rho12_im $rho13_im $rho22_im $rho23_im $rho33_im $rho_bar11_im $rho_bar12_im $rho_bar13_im $rho_bar22_im $rho_bar23_im $rho_bar33_im $N $N_bar $t\n")
+			end
+						
+		elseif number_of_flavors==2
+		
+			write(io, "x_position x_direction rho11_re rho12_re rho22_re rho_bar11_re rho_bar12_re rho_bar22_re rho11_im rho12_im rho22_im rho_bar11_im rho_bar12_im rho_bar22_im number_of_neutrinos number_of_antineutrinos time\n")
+			for i in eachindex(particle_data[1])
+				
+				x=particle_data[1][i]
+				xd=particle_data[2][i]
+				
+				rho11=real(particle_data[3][i][1,1])
+				rho12=real(particle_data[3][i][1,2])
+				rho22=real(particle_data[3][i][2,2])
+				
+				rho_bar11=real(particle_data[4][i][1,1])
+				rho_bar12=real(particle_data[4][i][1,2])
+				rho_bar22=real(particle_data[4][i][2,2])
+
+				rho11_im=imag(particle_data[3][i][1,1])
+				rho12_im=imag(particle_data[3][i][1,2])
+				rho22_im=imag(particle_data[3][i][2,2])
+
+				rho_bar11_im=imag(particle_data[4][i][1,1])
+				rho_bar12_im=imag(particle_data[4][i][1,2])
+				rho_bar22_im=imag(particle_data[4][i][2,2])
+
+				N=particle_data[5][i]
+				N_bar=particle_data[6][i]
+				
+				t=time
+
+				write(io, "$x $xd $rho11 $rho12 $rho22 $rho_bar11 $rho_bar12 $rho_bar22 $rho11_im $rho12_im $rho22_im $rho_bar11_im $rho_bar12_im $rho_bar22_im $N $N_bar $t\n")
+
+			end				
+		end	
 	close(io);
 end
