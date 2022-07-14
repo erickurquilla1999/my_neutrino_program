@@ -1,6 +1,6 @@
 # grid parameters
-number_of_cells=64
-cell_x_lenght=100 #cm
+number_of_cells=1
+cell_x_lenght=1e2 #cm
 
 particles_number_density=4.891290819e+35 #cm-1
 perturbation_amplitud=1.0e-6
@@ -19,6 +19,8 @@ mass_2=0.03 #eV/c2
 mass_3=0.02 #eV/c2
 
 neutrino_energy=50.0e+6 #eV
+
+number_of_flavors=2
 
 #simulation parameters
 simulation_initial_time=0.0
