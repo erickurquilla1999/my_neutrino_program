@@ -21,12 +21,17 @@ function particles_initial_condition(x__grid_center)
 	
 	for i in collect(2:(number_of_cells+1))
 		
-		#particle to the right
-		
+		#particle to the right index 2i-3
+		#particle to the left index 2i-2
+						
 		x_particle_position[2i-3]=x__grid_center[i]
 		x_particle_direction[2i-3]=1
+		
+		x_particle_position[2i-2]=x__grid_center[i]
+		x_particle_direction[2i-2]=-1		
 					
 		if number_of_flavors==3
+			
 			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
 			rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
 			rho22=perturbation_amplitud*rand(Float64)
@@ -37,24 +42,7 @@ function particles_initial_condition(x__grid_center)
 			rho22=perturbation_amplitud*rand(Float64)
 			rho33=perturbation_amplitud*rand(Float64)			
 			particles_rho_bar[2i-3]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
-		elseif number_of_flavors==2
-			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
-			rho22=perturbation_amplitud*rand(Float64)
-			particles_rho[2i-3]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
-			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
-			rho22=perturbation_amplitud*rand(Float64)
-			particles_rho_bar[2i-3]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
-		end
-													
-		number_of_neutrinos[2i-3]=(particles_number_density*cell_x_lenght^3)/4	
-		number_of_antineutrinos[2i-3]=(particles_number_density*cell_x_lenght^3)/4		
-		
-		#particle to the left
-		
-		x_particle_position[2i-2]=x__grid_center[i]
-		x_particle_direction[2i-2]=-1
-					
-		if number_of_flavors==3
+			
 			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
 			rho13=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)
 			rho22=perturbation_amplitud*rand(Float64)
@@ -65,15 +53,28 @@ function particles_initial_condition(x__grid_center)
 			rho22=perturbation_amplitud*rand(Float64)
 			rho33=perturbation_amplitud*rand(Float64)			
 			particles_rho_bar[2i-2]=[(1.0+0.0im-rho22-rho33) rho12 rho13;conj(rho12) rho22 0.0+0.0im;conj(rho13) 0.0+0.0im rho33]
+
 		elseif number_of_flavors==2
+		
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho22=perturbation_amplitud*rand(Float64)
+			particles_rho[2i-3]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
+			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
+			rho22=perturbation_amplitud*rand(Float64)
+			particles_rho_bar[2i-3]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
+			
 			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
 			rho22=perturbation_amplitud*rand(Float64)
 			particles_rho[2i-2]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
 			rho12=perturbation_amplitud*(rand(Float64)+rand(Float64)*im)					
 			rho22=perturbation_amplitud*rand(Float64)
 			particles_rho_bar[2i-2]=[(1.0+0.0im-rho22) rho12;conj(rho12) rho22]
+		
 		end
-						
+													
+		number_of_neutrinos[2i-3]=(particles_number_density*cell_x_lenght^3)/4	
+		number_of_antineutrinos[2i-3]=(particles_number_density*cell_x_lenght^3)/4		
+							
 		number_of_neutrinos[2i-2]=(particles_number_density*cell_x_lenght^3)/4	
 		number_of_antineutrinos[2i-2]=(particles_number_density*cell_x_lenght^3)/4
 
@@ -97,41 +98,29 @@ function write_info(name,particle_data,time)
 			rho11=real(particle_data[3][i][1,1])
 			rho12=real(particle_data[3][i][1,2])
 			rho13=real(particle_data[3][i][1,3])
-			#rho21=real(particle_data[3][i][2,1])
 			rho22=real(particle_data[3][i][2,2])
 			rho23=real(particle_data[3][i][2,3])
-			#rho31=real(particle_data[3][i][3,1])
-			#rho32=real(particle_data[3][i][3,2])
 			rho33=real(particle_data[3][i][3,3])
 			
 			rho_bar11=real(particle_data[4][i][1,1])
 			rho_bar12=real(particle_data[4][i][1,2])
 			rho_bar13=real(particle_data[4][i][1,3])
-			#rho_bar21=real(particle_data[4][i][2,1])
 			rho_bar22=real(particle_data[4][i][2,2])
 			rho_bar23=real(particle_data[4][i][2,3])
-			#rho_bar31=real(particle_data[4][i][3,1])
-			#rho_bar32=real(particle_data[4][i][3,2])
 			rho_bar33=real(particle_data[4][i][3,3])
 
 			rho11_im=imag(particle_data[3][i][1,1])
 			rho12_im=imag(particle_data[3][i][1,2])
 			rho13_im=imag(particle_data[4][i][1,3])
-			#rho21_im=imag(particle_data[3][i][2,1])
 			rho22_im=imag(particle_data[3][i][2,2])
 			rho23_im=imag(particle_data[3][i][2,3])
-			#rho31_im=imag(particle_data[3][i][3,1])
-			#rho32_im=imag(particle_data[3][i][3,2])
 			rho33_im=imag(particle_data[3][i][3,3])
 			
 			rho_bar11_im=imag(particle_data[4][i][1,1])
 			rho_bar12_im=imag(particle_data[4][i][1,2])
 			rho_bar13_im=imag(particle_data[4][i][1,3])
-			#rho_bar21_im=imag(particle_data[4][i][2,1])
 			rho_bar22_im=imag(particle_data[4][i][2,2])
 			rho_bar23_im=imag(particle_data[4][i][2,3])
-			#rho_bar31_im=imag(particle_data[4][i][3,1])
-			#rho_bar32_im=imag(particle_data[4][i][3,2])
 			rho_bar33_im=imag(particle_data[4][i][3,3])
 			
 			N=particle_data[5][i]
