@@ -152,7 +152,7 @@ function write_info(name,particle_data,time)
 	
 	println("Writting $name data")
 	
-	io = open("output/$name", "w");
+	io = open("../output/$name", "w");
 		write(io, "x_position x_direction rho11_re rho12_re rho13_re rho22_re rho23_re rho33_re rho_bar11_re rho_bar12_re rho_bar13_re rho_bar22_re rho_bar23_re rho_bar33_re rho11_im rho12_im rho13_im rho22_im rho23_im rho33_im rho_bar11_im rho_bar12_im rho_bar13_im rho_bar22_im rho_bar23_im rho_bar33_im number_of_neutrinos number_of_antineutrinos time\n")
 		for i in eachindex(particle_data[1])
 			
