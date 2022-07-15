@@ -10,7 +10,7 @@ rho11=[]
 rho22=[]
 
 for i in range(0,200):
-	data = np.loadtxt("../output/step_"+str(i)+".txt", unpack = True, skiprows=1)
+	data = np.loadtxt("output/step_"+str(i)+".txt", unpack = True, skiprows=1)
 	
 	#$x $xd $rho11 $rho12 $rho22 $rho_bar11 $rho_bar12 $rho_bar22 $rho11_im $rho12_im $rho22_im $rho_bar11_im $rho_bar12_im $rho_bar22_im $N $N_bar $t
 	# 0   1    2     3       4       5           6        7           8        9           10         11         12             13        14   15   16
