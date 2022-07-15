@@ -52,9 +52,18 @@ function compute_hamiltonians(x_dir,interpotation_data)
 	
 		H_vacuum[i]=ham_vacuum
 		H_vacuum_bar[i]=conj(ham_vacuum)			
-	
+
+		if number_of_flavors==3
+		
 		H_matter[i]     = sqrt(2)*Gf*(hbar*c)^3*[(background_electron_number_density-background_antielectron_number_density) 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im 0.0+0.0im]	
 		H_matter_bar[i] = -conj(H_matter[i])
+		
+		elseif number_of_flavors==2
+
+		H_matter[i]     = sqrt(2)*Gf*(hbar*c)^3*[(background_electron_number_density-background_antielectron_number_density) 0.0+0.0im;0.0+0.0im 0.0+0.0im]	
+		H_matter_bar[i] = -conj(H_matter[i])	
+	
+		end
 						
 		H_neutrino[i]     = sqrt(2)*Gf*(hbar*c)^3*((N[i]-conj(N_bar[i]))-x_dir[i]*(x_flux[i]-conj(x_flux_bar[i])))
 		H_neutrino_bar[i] = -conj(H_neutrino[i])
@@ -89,21 +98,21 @@ function compute_next_step_particle_data(hamiltonians,initial_data,time)
 	H_neutrino_bar=hamiltonians[6]
 
 	x_particle_position=fill(0.0,length(x_dir))
-	particles_rho=fill(zeros(Complex{Float64},(3,3)),length(x_dir)) 
-	particles_rho_bar=fill(zeros(Complex{Float64},(3,3)),length(x_dir))
+	particles_rho=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir)) 
+	particles_rho_bar=fill(zeros(Complex{Float64},(number_of_flavors,number_of_flavors)),length(x_dir))
 
 	for i in eachindex(initial_data[1])
 
 		function position_x_dot(t,x)
 			return c*x_dir[i]
 		end		
+
 		function rho_dot(t,rho_)
 			return (-im/hbar)*((H_vacuum[i]+H_matter[i]+H_neutrino[i])*rho_-rho_*(H_vacuum[i]+H_matter[i]+H_neutrino[i]))
-
 		end
+
 		function rho_bar_dot(t,rho_bar_)
 			return (-im/hbar)*((H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i])*rho_bar_-rho_bar_*(H_vacuum_bar[i]+H_matter_bar[i]+H_neutrino_bar[i]))
-
 		end
 
 		x_particle_position[i] = rk4(position_x_dot,time,x[i],time_step)
