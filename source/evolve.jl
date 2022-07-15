@@ -35,12 +35,12 @@ function compute_hamiltonians(x_dir,interpotation_data)
 	if number_of_flavors==3
 		
 		U=[c12*c13 s12*c13 s13*e^(-im*delta_cp);-s12*c23-c12*s13*s23*e^(im*delta_cp) c12*c23-s12*s13*s23*e^(im*delta_cp) c13*s23;s12*s23-c12*s13*c23*e^(im*delta_cp) -c12*s23-s12*s13*c23*e^(im*delta_cp) c13*c23]	
-		mass=eV_to_J*[mass_1^2/(2*neutrino_energy)+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im mass_3^2/(2*neutrino_energy)+0.0im]
+		mass=[mass_1^2*c4/(2*neutrino_energy)+0.0im 0.0+0.0im 0.0+0.0im;0.0+0.0im mass_2^2*c4/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im 0.0+0.0im mass_3^2*c4/(2*neutrino_energy)+0.0im]       
 	
 	elseif number_of_flavors==2
 	
 		U=[c12 -s12;s12 c12]			
-		mass=eV_to_J*[mass_1^2/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im mass_2^2/(2*neutrino_energy)+0.0im]
+		mass=[mass_1^2*c4/(2*neutrino_energy)+0.0im 0.0+0.0im;0.0+0.0im mass_2^2*c4/(2*neutrino_energy)+0.0im]
 	
 	end
 	
