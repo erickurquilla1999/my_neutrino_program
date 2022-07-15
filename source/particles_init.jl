@@ -88,7 +88,7 @@ function write_info(name,particle_data,time)
 	
 	println("Writting $name data")
 	
-	io = open("../output/$name", "w");
+	io = open("output/$name", "w");
 		
 		if number_of_flavors==3
 		
